@@ -7,7 +7,7 @@ const AboutUs: React.FC = () => {
       <div className="container mx-auto px-11 ">
         <p className="leading-tight max-w-5xl mx-auto text-4xl  tracking-tight">
           <strong>We will help you ship better apps, faster. </strong>
-          Our team of expert engineershas created the best user experiences in
+          Our team of expert engineers has created the best user experiences in
           some of the most popular apps worldwide.
         </p>
       </div>
