@@ -1,4 +1,5 @@
 import React from "react";
+import ClientLogos from "./client-logos";
 
 const TrustedBy: React.FC = () => {
   return (
@@ -11,10 +12,10 @@ const TrustedBy: React.FC = () => {
             some of the apps you use daily
           </span>
         </h3>
-        <div>logos</div>
+        <ClientLogos />
       </div>
       <div className="flex flex-col justify-center items-center ">
-        <div className="container  lg:max-w-[70%] lg:px-10 ">
+        <div className="container mx-auto  lg:max-w-[70%] lg:px-10 ">
           <h3 className="text-3xl lg:text-3xl tracking-tight text-center px-10 !leading-[3.5rem]">
             We believe in good communication and a fully transparent process.
           </h3>
