@@ -1,12 +1,12 @@
 import Link from "next/link";
-import React from "react";
+import React, { ReactNode } from "react";
 
 type Props = {
   children?: React.ReactNode;
 };
 
 interface Properties {
-  children?: React.ReactNode;
+  children?: ReactNode;
   progress: number;
 }
 
