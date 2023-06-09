@@ -3,6 +3,7 @@ import s from "../styles/skills.module.css";
 import { ScrollContext } from "../utils/scroll-observer";
 
 interface Props {
+  downloads: number;
   commits: number;
 }
 
@@ -12,7 +13,7 @@ const opacityForBlock = (sectionProgress: number, blockNo: number) => {
   return 0.2;
 };
 
-const Skills: React.FC<Props> = ({ commits }) => {
+const Skills: React.FC<Props> = ({ commits, downloads }) => {
   const { scrollY } = useContext(ScrollContext);
   const refContainer = useRef<HTMLDivElement>(null);
   const numOfPages = 3;
@@ -31,6 +32,8 @@ const Skills: React.FC<Props> = ({ commits }) => {
     progress = Math.min(numOfPages - 0.5, Math.max(0.5, percentY * numOfPages));
   }
 
+  const numOfDL =
+    Math.round((downloads || 0) / 1000 / 1000).toLocaleString() + " million";
   const numOfCommits = Math.round(commits || 0).toLocaleString();
 
   return (
@@ -59,7 +62,7 @@ const Skills: React.FC<Props> = ({ commits }) => {
             style={{ opacity: opacityForBlock(progress, 2) }}
           >
             We&apos;re maintaining some of the most popular open-source
-            projects, with over <strong>1,234</strong> downloads.
+            projects, with over <strong>{numOfDL}</strong> downloads.
           </span>
         </div>
       </div>

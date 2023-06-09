@@ -100,7 +100,7 @@ export default async function handler(
   _req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  const [commits, downloads] = await Promise.all([
+  const [downloads, commits] = await Promise.all([
     getNumOfDownloads(),
     getNumOfCommits(),
   ]);
@@ -108,7 +108,7 @@ export default async function handler(
   //cache it for a day
   res.setHeader("Cache-Control", "s-maxage=86400");
   res.status(200).json({
-    commits,
     downloads,
+    commits,
   });
 }
