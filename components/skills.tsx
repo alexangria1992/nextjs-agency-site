@@ -2,13 +2,17 @@ import React, { useContext, useRef } from "react";
 import s from "../styles/skills.module.css";
 import { ScrollContext } from "../utils/scroll-observer";
 
+interface Props {
+  commits: number;
+}
+
 const opacityForBlock = (sectionProgress: number, blockNo: number) => {
   const progress = sectionProgress - blockNo;
   if (progress >= 0 && progress < 1) return 1;
   return 0.2;
 };
 
-const Skills: React.FC = () => {
+const Skills: React.FC<Props> = ({ commits }) => {
   const { scrollY } = useContext(ScrollContext);
   const refContainer = useRef<HTMLDivElement>(null);
   const numOfPages = 3;
@@ -26,6 +30,8 @@ const Skills: React.FC = () => {
       ) / clientHeight;
     progress = Math.min(numOfPages - 0.5, Math.max(0.5, percentY * numOfPages));
   }
+
+  const numOfCommits = Math.round(commits || 0).toLocaleString();
 
   return (
     <div ref={refContainer} className="bg-black text-white">
@@ -45,8 +51,8 @@ const Skills: React.FC = () => {
             className={`${s.skillText} inline-block after:content-['_']`}
             style={{ opacity: opacityForBlock(progress, 1) }}
           >
-            Our team has contributed 123 commits to React Native core, powering
-            thousands of apps worldwide.
+            Our team has contributed {numOfCommits} commits to React Native
+            core, powering thousands of apps worldwide.
           </span>
           <span
             className={`${s.skillText} inline-block`}

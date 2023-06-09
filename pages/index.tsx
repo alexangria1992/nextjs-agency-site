@@ -9,8 +9,13 @@ import Works from "../components/works";
 import TrustedBy from "../components/trustedby";
 import ContactUs from "../components/contactus";
 import Footer from "../components/footer";
+import useSWR from "swr";
+
+const fetcher = (input: any, init?: any) =>
+  fetch(input, init).then((res) => res.json());
 
 const Home: NextPage = () => {
+  const { data } = useSWR("/api/stats", fetcher);
   return (
     <div>
       <Head>
@@ -21,7 +26,7 @@ const Home: NextPage = () => {
 
       <Masthead />
       <AboutUs />
-      <Skills />
+      <Skills commits={data?.commits} />
       <Works />
       <TrustedBy />
       <ContactUs />
