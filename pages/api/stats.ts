@@ -2,8 +2,27 @@ import axios from "axios";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 type Data = {
+  downloads: number;
   commits: number;
 };
+
+const packages = [
+  "react-native-mmkv",
+  "react-native-vision-camera",
+  "react-native-blurhash",
+  // Janic
+  "react-native-safe-area-context",
+  // Thomas
+  "expo-image-editor",
+  // Margelo
+  "react-native-bignumber",
+];
+
+const scopedPackages = [
+  "@gorhom/bottom-sheet",
+  "@gorhom/animated-tabbar",
+  "@gorhom/portal",
+];
 
 const ghAccounts: { readonly [username: string]: number } = {
   mrousavy: 1,
@@ -19,6 +38,30 @@ const ghAccounts: { readonly [username: string]: number } = {
 
 const ghAuthUsername = process.env["GITHUB_USERNAME"] || "";
 const ghAuthToken = process.env["GITHUB_PERSONAL_ACCESS_TOKEN"] || "";
+
+async function getNumOfDownloads() {
+  try {
+    const since = new Date(+new Date() - 365 * 24 * 60 * 60 * 1000)
+      .toISOString()
+      .split("T")[0];
+    const now = new Date().toISOString().split("T")[0];
+    const baseUrl = `https://api.npmjs.org/downloads/point/${since}:${now}`;
+    const url = `${baseUrl}/${packages.join(",")}`;
+    const { data: stats } = await axios.get(url);
+    for (const scopedPackage of scopedPackages) {
+      const { data } = await axios.get(`${baseUrl}/${scopedPackage}`);
+      stats[scopedPackage] = data;
+    }
+    const downloads = Object.keys(stats).reduce(
+      (num, key) => num + stats[key].downloads,
+      0
+    );
+    return downloads;
+  } catch (e) {
+    console.error(e);
+    return 0;
+  }
+}
 async function getNumOfCommits() {
   try {
     const baseUrl = `https://api.github.com/repos/facebook/react-native/commits`;
@@ -57,11 +100,15 @@ export default async function handler(
   _req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  const commits = await getNumOfCommits();
+  const [commits, downloads] = await Promise.all([
+    getNumOfDownloads(),
+    getNumOfCommits(),
+  ]);
 
   //cache it for a day
   res.setHeader("Cache-Control", "s-maxage=86400");
   res.status(200).json({
     commits,
+    downloads,
   });
 }
